@@ -1,0 +1,9 @@
+MANIFEST
+# -------
+# IPython notebook
+.ipynb_checkpoints
+.vscode
+
+clustering
+
+compare_GB_models/catboost_info/
