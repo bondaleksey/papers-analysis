@@ -1,0 +1,61 @@
+
+Дополнительные вариант: 
+----
+Работать с Google scholar и использовать библиотеку:
+https://pypi.org/project/scholarly/
+
+или 
+https://serpapi.com/google-scholar-organic-results
+
+---
+Вариант 1 https://github.com/giantas/elibrary
+Мои статьи 
+https://elibrary.ru/author_items.asp?authorid=915869
+
+Id келдыша: 
+Шапка Организации: 
+https://elibrary.ru/org_about.asp?orgsid=375
+
+Анализ общих статей всего Келдыша по самому elabrary:
+https://elibrary.ru/org_profile.asp?id=375
+СПИСОК ПУБЛИКАЦИЙ ОРГАНИЗАЦИИ
+https://elibrary.ru/org_items.asp?orgsid=375
+Всего найдено 16083 публикации с общим количеством цитирований: 114128.
+
+Карточка организации: 
+https://elibrary.ru/help_org_about.asp?io=0&ig=0&ia=0
+
+
+Пример статьи: 
+https://elibrary.ru/item.asp?id=48086460
+
+Тестовая статья для разбору: 
+
+https://elibrary.ru/item.asp?id=48086462
+
+
+
+
+
+
+
+!!! При запросах работать под VPN !!!!
+Текущая задача  
+
+Сделать анализ 
+Как получить 
+Где храниться 
+- автор, 
+- где он работает
+- где аннотация
+- где вид Статья или конференция или что это 
+Статья в Вак, или статья еще в чем-то? 
+
+--- Какие данные надо считывать??? 
+
+
+Работать 
+Как получить данные:
+Хотя бы за последний год = 21 ый 
+
+
