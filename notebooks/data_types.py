@@ -49,7 +49,7 @@ class AuthorsDB():
     
     def __init__(self, adb={}):
         self.db = adb
-        self.filename = "../data/dbase/authorsDB.pkl"
+        self.filename = "../data/authorsDB.pkl"
     
     def update_data(self, adb:Author):        
         for id, info in adb.items():            
@@ -164,7 +164,7 @@ class PublicationsDB():
     def __init__(self, pdb={}):
         self.db = pdb
         # self.cols = ["mn_link","author_id","doi","udk","type","references"]
-        self.filename = "../data/dbase/publicationsDB.pkl"
+        self.filename = "../data/publicationsDB.pkl"
     
     def update_data(self,pub):
         for id, info in pub.items():
@@ -246,7 +246,7 @@ class AbstractsDB():
         self.db = pd.DataFrame(columns = cols)
         self.db.index.name = "mn_link"
         # self.cols = cols[1:]
-        self.filename = "../data/dbase/abstractsDB.pkl"
+        self.filename = "../data/abstractsDB.pkl"
     
     def update_data(self,datadict):        
         # https://stackoverflow.com/questions/42632470/how-to-add-dictionaries-to-a-dataframe-as-a-row        
