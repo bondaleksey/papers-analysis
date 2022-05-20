@@ -84,6 +84,7 @@ ipython_config.py
 # pyenv
 .python-version
 
+
 # pipenv
 #   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
 #   However, in case of collaboration, if having platform-specific dependencies or dependencies
@@ -102,6 +103,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
+tbot4papersanalysis.venv
 .env
 .venv
 env/
@@ -127,3 +129,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+config.py
