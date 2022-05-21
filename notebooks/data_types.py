@@ -47,9 +47,9 @@ class Author():
 # https://www.reddit.com/r/learnpython/comments/774kjr/multiple_values_in_one_cell_in_pandas/        
 class AuthorsDB():
     
-    def __init__(self, adb={}):
-        self.db = adb
-        self.filename = "../data/authorsDB.pkl"
+    def __init__(self, path="../data/"):
+        self.db = {}
+        self.filename = path + "authorsDB.pkl"
     
     def update_data(self, adb:Author):        
         for id, info in adb.items():            
@@ -96,13 +96,15 @@ class AuthorsDB():
         try:
             with open(self.filename,'rb') as inp:
                 self.db = pickle.load(inp)
-        except:
-            print(f"We have problems in {type(self).__name__} while reading file:{self.filename}")
-                    
+        except Exception as e:
+            print(f"We have problems in {type(self).__name__} while reading file:{self.filename}, \n Exception:", str(e)) 
+        # except:
+        #     print(f"We have problems in {type(self).__name__} while reading file:{self.filename}")
+
 
 class Publication():
     
-    def __init__(self,mn_id=0):        
+    def __init__(self, mn_id=0):        
         self.cols = ["mn_link","author_id","doi","udk","send","type","reference","by","paper","jour","yr","vol","issue","pages"]
         self.info_dict={keys:None for keys in self.cols}
         self.pub_info_cols =["mn_link"]
@@ -161,10 +163,10 @@ class Publication():
 
 class PublicationsDB():
     
-    def __init__(self, pdb={}):
-        self.db = pdb
+    def __init__(self, path= "../data/"):
+        self.db = {}
         # self.cols = ["mn_link","author_id","doi","udk","type","references"]
-        self.filename = "../data/publicationsDB.pkl"
+        self.filename = path + "publicationsDB.pkl"
     
     def update_data(self,pub):
         for id, info in pub.items():
@@ -210,8 +212,10 @@ class PublicationsDB():
         try:
             with open(self.filename,'rb') as inp:
                 self.db = pickle.load(inp)
-        except:
-            print(f"We have problems in {type(self).__name__} while reading file:{self.filename}")
+        except Exception as e:
+            print(f"We have problems in {type(self).__name__} while reading file:{self.filename}, \n Exception:", str(e))    
+        # except:
+        #     print(f"We have problems in {type(self).__name__} while reading file:{self.filename}")
 
 class Abstract():
     
@@ -240,13 +244,13 @@ class Abstract():
 
 class AbstractsDB():
     
-    def __init__(self):        
+    def __init__(self, path="../data/"):        
         # cols = ["mn_link","abstract","keywords"]
         cols = ["abstract","keywords"]        
         self.db = pd.DataFrame(columns = cols)
         self.db.index.name = "mn_link"
         # self.cols = cols[1:]
-        self.filename = "../data/abstractsDB.pkl"
+        self.filename = path +  "abstractsDB.pkl"
     
     def update_data(self,datadict):        
         # https://stackoverflow.com/questions/42632470/how-to-add-dictionaries-to-a-dataframe-as-a-row        
@@ -307,5 +311,5 @@ class AbstractsDB():
         try:
             with open(self.filename,'rb') as inp:
                 self.db = pickle.load(inp)
-        except:
-            print(f"We have problems in {type(self).__name__} while reading file:{self.filename}")
+        except Exception as e:
+            print(f"We have problems in {type(self).__name__} while reading file:{self.filename}, \n Exception:", str(e))
