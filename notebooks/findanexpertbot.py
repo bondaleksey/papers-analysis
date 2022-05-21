@@ -30,9 +30,12 @@ bot = telebot.TeleBot(config.TOKEN)
 @bot.message_handler(content_types=['text'])
 def repeat_all_messages(message):
     if message.text == 'otus':
+        # print(message)
+        print(message.from_user)
         bot.reply_to(message," i'm stopping")
         bot.stop_polling()
     else:
+        print(message.from_user)
         print(message.text)
         # print(message.chat.id)
         # print(message.text)
