@@ -1,45 +1,53 @@
 import config 
 import telebot
 # import pickle
-from model import Model 
+ 
+from botfunctions import BotMenu
+from datetime import datetime
 
-# import os 
-# dir_path = os.path.dirname(os.path.realpath(__file__))
-# print(dir_path)
-
-# import os
-
-# cwd = os.getcwd()  # Get the current working directory (cwd)
-# files = os.listdir(cwd)  # Get all the files in that directory
-# print("Files in %r: %s" % (cwd, files))
-
-# filename = "data\\mnid_author_dict.pkl"
-# with open(filename,'rb') as inp:
-#     authors_dict = pickle.load(inp)
-# ind = 0
-# for k, v in authors_dict.items():
-#     ind += 1
-#     print(k,v)
-#     if ind>4:
-#         break
-
-model = Model(path = 'data/')
-
+menu = BotMenu()
 bot = telebot.TeleBot(config.TOKEN)
 
+@bot.message_handler(commands=['start'])
+def start_message(message):
+  bot.send_message(message.chat.id,"Привет ✌️ ")
+
 @bot.message_handler(content_types=['text'])
-def repeat_all_messages(message):
+def repeat_all_messages(message):    
+    print(message.from_user)
+    # print(message.from_user.first_name, message.from_user.last_name, message.from_user.username)    
+    print(datetime.utcfromtimestamp(message.date))    
+    print(message.text)
+    print("inmain = ", menu.inmain)
+    print("undermain = ",menu.undermain)
     if message.text == 'otus':
-        # print(message)
-        print(message.from_user)
         bot.reply_to(message," i'm stopping")
         bot.stop_polling()
+        return 
+    if menu.inmain:        
+        if message.text in menu.main_menu_text:
+            print('1 I am here ')
+            output_result = menu.main_menu_reaction(message.text)
+            markup = menu.generate_undermenu_markup()
+            bot.send_message(message.chat.id, output_result,reply_markup=markup)
+            # сделать кнопку возврата в главное меню 
+        else:
+            print('2 I am here ')
+            markup = menu.generate_menu_markup()
+            bot.send_message(message.chat.id, menu.menu_default_text, reply_markup=markup)
     else:
-        print(message.from_user)
-        print(message.text)
-        # print(message.chat.id)
-        # print(message.text)
-        bot.send_message(message.chat.id, model.get_model_response(message.text))
-    
+        if message.text in menu.undermenu_text:
+            print('3 I am here ')
+            output_text = menu.from_undermenu_to_main_menu()
+            markup = menu.generate_menu_markup()
+            bot.send_message(message.chat.id, output_text, reply_markup=markup)            
+        else:
+            markup = menu.generate_undermenu_markup()
+            output_result = menu.under_menu_reaction(message.text)
+            print('4 You have to send')
+            bot.send_message(message.chat.id, output_result, reply_markup=markup)            
+            # bot.send_message(message.chat.id, output_result)  
+
+
 if __name__ == '__main__':
-    bot.infinity_polling()
+    bot.infinity_polling(interval=0, timeout=5)

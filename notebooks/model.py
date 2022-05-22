@@ -3,6 +3,7 @@ import numpy as np
 import pickle
 import matplotlib.pyplot as plt
 from tqdm.notebook import tqdm
+import re
 
 import string # библиотека для работы со строками
 import nltk   # Natural Language Toolkit
@@ -39,7 +40,7 @@ class Model():
     
     def __init__(self, path='../data/'):        
         self.path = path
-        print("self.path = ", self.path)
+        # print("self.path = ", self.path)
         self.audb = AuthorsDB(path)
         self.audb.load()
         pubdb = PublicationsDB(path)
@@ -57,12 +58,19 @@ class Model():
         self.authors_dict = None
         self.load_authors_dict()
         
-        nltk.download('stopwords')
-        self.stop_words = nltk.corpus.stopwords.words('russian')
+        # filename = "../data/mathnet_iam_authors_dict.pkl"
+        # with open(filename,'rb') as inp:
+        #     authors_dict = pickle.load(inp)
+        stop_words_filename = path+'ru_stop_words.pkl'
+        # nltk.download('stopwords')
+        # self.stop_words = nltk.corpus.stopwords.words('russian')
+        stop_words = ['']
+        with open(stop_words_filename,'rb') as inp:
+            stop_words = pickle.load(inp)
+        self.stop_words = stop_words
         self.word_tokenizer = nltk.WordPunctTokenizer()
         self.morph = pymorphy2.MorphAnalyzer()
-        
-        
+            
         
     def load_vectorizer(self):        
         filename_vec = self.path + 'vectorizer.pkl'
@@ -124,3 +132,20 @@ class Model():
         answer = ' '.join(answer)            
         # print(type(answer))                
         return answer
+    
+    def get_authors_last_papers(self, surname):
+        output = []
+        regex = surname+'\s'
+        for id,name in self.authors_dict.items():            
+            if surname not in name:
+                continue
+            else:                
+                result = re.match(regex,name)
+                if result is not None: 
+                    output.append(f"На данный момент у автора: {name} учтено {len(self.audb.db[id])} статьи. Вот некоторые из них:\n")        
+                    local_res = [(k,v) for k, v in sorted(self.audb.db[id].items(), key=lambda item: item[1]['year'],reverse=True)]
+                       # print(mod.audb.db[k][item]['year'])
+                    for item in local_res[:5]:
+                        print(item[0])
+                        output.append(self.pub.loc[item[0]]['reference']+'\n')
+        return ' '.join(output)
