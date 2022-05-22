@@ -20,7 +20,7 @@ def repeat_all_messages(message):
     print(message.text)
     print("inmain = ", menu.inmain)
     print("undermain = ",menu.undermain)
-    if message.text == 'otus':
+    if message.text.lower() == 'otus':
         bot.reply_to(message," i'm stopping")
         bot.stop_polling()
         return 
@@ -44,7 +44,9 @@ def repeat_all_messages(message):
         else:
             markup = menu.generate_undermenu_markup()
             output_result = menu.under_menu_reaction(message.text)
-            print('4 You have to send')
+            print(output_result)
+            print(type(output_result))
+            print('4 I am here ')
             bot.send_message(message.chat.id, output_result, reply_markup=markup)            
             # bot.send_message(message.chat.id, output_result)  
 

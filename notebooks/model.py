@@ -134,7 +134,7 @@ class Model():
         return answer
     
     def get_authors_last_papers(self, surname):
-        output = []
+        output = ['']
         regex = surname+'\s'
         for id,name in self.authors_dict.items():            
             if surname not in name:
@@ -148,4 +148,7 @@ class Model():
                     for item in local_res[:5]:
                         print(item[0])
                         output.append(self.pub.loc[item[0]]['reference']+'\n')
-        return ' '.join(output)
+        print("len(output) = ",len(output))
+        if len(output) == 1:
+            output = [f'Не удалось найти автора по фамилии: {surname}']
+        return ''.join(output)
