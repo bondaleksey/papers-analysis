@@ -122,23 +122,23 @@ class Model():
 
         coef = coef_uni + coef_bi + coef_tri        
                 
-        print(vect_req_uni)        
-        print(np.sort(ohe_request_uni[0])[::-1][:10])
-        index_cu = np.argsort(ohe_request_uni[0])[::-1][:10]
-        print('index_cu= ',index_cu)        
-        print(self.vectorizer_uni.get_feature_names_out()[index_cu])
+        # print(vect_req_uni)        
+        # print(np.sort(ohe_request_uni[0])[::-1][:10])
+        # index_cu = np.argsort(ohe_request_uni[0])[::-1][:10]
+        # print('index_cu= ',index_cu)        
+        # print(self.vectorizer_uni.get_feature_names_out()[index_cu])
         
-        print(vect_req_bi)        
-        print(np.sort(ohe_request_bi[0])[::-1][:10])
-        index_cb = np.argsort(ohe_request_bi[0])[::-1][:10]
-        print('index_cb= ',index_cb)        
-        print(self.vectorizer_bi.get_feature_names_out()[index_cb])
+        # print(vect_req_bi)        
+        # print(np.sort(ohe_request_bi[0])[::-1][:10])
+        # index_cb = np.argsort(ohe_request_bi[0])[::-1][:10]
+        # print('index_cb= ',index_cb)        
+        # print(self.vectorizer_bi.get_feature_names_out()[index_cb])
         
-        print(vect_req_tri)        
-        print(np.sort(ohe_request_tri[0])[::-1][:10])
-        index_ct = np.argsort(ohe_request_tri[0])[::-1][:10]
-        print('index_ct= ',index_ct) 
-        print(self.vectorizer_tri.get_feature_names_out()[index_ct])
+        # print(vect_req_tri)        
+        # print(np.sort(ohe_request_tri[0])[::-1][:10])
+        # index_ct = np.argsort(ohe_request_tri[0])[::-1][:10]
+        # print('index_ct= ',index_ct) 
+        # print(self.vectorizer_tri.get_feature_names_out()[index_ct])
         pubs_index = np.argsort(coef)[::-1][:max_number_of_articles]        
         low_bound_pub_index  = [ind for ind in pubs_index if coef[ind]>low_bound]
         req_pups = list(self.abstracts.iloc[low_bound_pub_index].index)    
@@ -152,16 +152,16 @@ class Model():
                 break
             if item[0] in self.authors_dict:
                 index +=1
-                answer.append(f'Expert: {self.authors_dict[item[0]]}, raiting: {round(item[1],2)}\n')    
+                answer.append(f'Expert: {self.authors_dict[item[0]]}, rating: {round(item[1],2)}\n')    
         if len(answer)>0:        
             answer.append('-----------\n')
             answer.append('Список работ с наибольшим рейтингом:\n')
             for item in top_pubs[:max_output_pubs]:
                 answer.append(item+'\n') 
         else: 
-            answer.append('Работ с такими словами в аннотации не обнаружено')
+            answer.append('Не обнаружено публикаций с такими словами в аннотации')
         
-        answer = ' '.join(answer)            
+        answer = ''.join(answer)            
         # print(type(answer))                
         return answer
     
