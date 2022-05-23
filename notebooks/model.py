@@ -48,12 +48,15 @@ class Model():
         self.absdb = AbstractsDB(path)
         self.absdb.load()
         self.abstracts = self.absdb.db[self.absdb.db['abstract'].notna()].copy()
+                
+        self.vectorizer_uni = self.load_vectorizer('vectorizer_uni')
+        self.vectorizer_bi = self.load_vectorizer('vectorizer_bi')
+        self.vectorizer_tri = self.load_vectorizer('vectorizer_tri')
         
+        self.tf_idf_matrix_uni = self.load_tf_idf_matrix('tf_idf_matrix_uni')
+        self.tf_idf_matrix_bi = self.load_tf_idf_matrix('tf_idf_matrix_bi')
+        self.tf_idf_matrix_tri = self.load_tf_idf_matrix('tf_idf_matrix_tri')
         
-        self.vectorizer = None
-        self.load_vectorizer()
-        self.tf_idf_matrix = None
-        self.load_tf_idf_matrix()
         self.authors_dict = None
         self.load_authors_dict()
         
@@ -71,15 +74,17 @@ class Model():
         self.morph = pymorphy2.MorphAnalyzer()
             
         
-    def load_vectorizer(self):        
-        filename_vec = self.path + 'vectorizer.pkl'
+    def load_vectorizer(self,name):        
+        filename_vec = self.path + name+'.pkl'
         with open(filename_vec,'rb') as inp:
-            self.vectorizer = pickle.load(inp)         
+            vectorizer = pickle.load(inp)         
+        return vectorizer
 
-    def load_tf_idf_matrix(self):            
-        filename_tf_idf = self.path + 'tf_idf_matrix.pkl'
+    def load_tf_idf_matrix(self,name):            
+        filename_tf_idf = self.path + name+'.pkl'
         with open(filename_tf_idf,'rb') as inp:
-            self.tf_idf_matrix = pickle.load(inp)         
+            tf_idf_matrix = pickle.load(inp)         
+        return tf_idf_matrix
         
     def load_authors_dict(self):
         filename = self.path + "mnid_author_dict.pkl"
@@ -99,13 +104,41 @@ class Model():
         max_output_pubs = 5
         max_output_authors = 5
         
-        # request = self.process_request(request)    
-        vect_req = self.vectorizer.transform(self.process_request(request))
-        onehot = Binarizer()
-        ohe_request = onehot.fit_transform(vect_req.toarray())    
-        coef = (self.tf_idf_matrix.dot(ohe_request.T)).flatten()    
-        # coef = coef.flatten()    
+        # request = self.process_request(request)
+        request = self.process_request(request)
+        print('request = ', request)    
+        vect_req_uni = self.vectorizer_uni.transform(request)
+        vect_req_bi = self.vectorizer_bi.transform(request)
+        vect_req_tri = self.vectorizer_tri.transform(request)
         
+        onehot = Binarizer()
+        ohe_request_uni = onehot.fit_transform(vect_req_uni.toarray())    
+        ohe_request_bi = onehot.fit_transform(vect_req_bi.toarray())    
+        ohe_request_tri = onehot.fit_transform(vect_req_tri.toarray())    
+        
+        coef_uni = (self.tf_idf_matrix_uni.dot(ohe_request_uni.T)).flatten()
+        coef_bi = (self.tf_idf_matrix_bi.dot(ohe_request_bi.T)).flatten()
+        coef_tri = (self.tf_idf_matrix_tri.dot(ohe_request_tri.T)).flatten()
+
+        coef = coef_uni + coef_bi + coef_tri        
+                
+        print(vect_req_uni)        
+        print(np.sort(ohe_request_uni[0])[::-1][:10])
+        index_cu = np.argsort(ohe_request_uni[0])[::-1][:10]
+        print('index_cu= ',index_cu)        
+        print(self.vectorizer_uni.get_feature_names_out()[index_cu])
+        
+        print(vect_req_bi)        
+        print(np.sort(ohe_request_bi[0])[::-1][:10])
+        index_cb = np.argsort(ohe_request_bi[0])[::-1][:10]
+        print('index_cb= ',index_cb)        
+        print(self.vectorizer_bi.get_feature_names_out()[index_cb])
+        
+        print(vect_req_tri)        
+        print(np.sort(ohe_request_tri[0])[::-1][:10])
+        index_ct = np.argsort(ohe_request_tri[0])[::-1][:10]
+        print('index_ct= ',index_ct) 
+        print(self.vectorizer_tri.get_feature_names_out()[index_ct])
         pubs_index = np.argsort(coef)[::-1][:max_number_of_articles]        
         low_bound_pub_index  = [ind for ind in pubs_index if coef[ind]>low_bound]
         req_pups = list(self.abstracts.iloc[low_bound_pub_index].index)    
