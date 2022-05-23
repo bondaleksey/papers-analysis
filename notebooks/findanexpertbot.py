@@ -10,7 +10,10 @@ bot = telebot.TeleBot(config.TOKEN)
 
 @bot.message_handler(commands=['start'])
 def start_message(message):
-  bot.send_message(message.chat.id,"Привет ✌️ ")
+    # bot.send_message(message.chat.id,"Привет ✌️ ")
+    print('5 I am here ')
+    markup = menu.generate_menu_markup()
+    bot.send_message(message.chat.id, "Привет ✌️\n"+menu.menu_default_text, reply_markup=markup)
 
 @bot.message_handler(content_types=['text'])
 def repeat_all_messages(message):    
@@ -44,8 +47,8 @@ def repeat_all_messages(message):
         else:
             markup = menu.generate_undermenu_markup()
             output_result = menu.under_menu_reaction(message.text)
-            print(output_result)
-            print(type(output_result))
+            # print(output_result)
+            # print(type(output_result))
             print('4 I am here ')
             bot.send_message(message.chat.id, output_result, reply_markup=markup)            
             # bot.send_message(message.chat.id, output_result)  

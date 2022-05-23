@@ -1,8 +1,19 @@
-import telebot
+
 from telebot import types
 import random 
 from model import Model
-model = Model(path = 'data/')
+from os.path import exists
+
+
+if exists('../data/'):
+    model = Model()
+elif exists('data/'):
+    model = Model(path = 'data/')
+else:
+    print("You don't have folder with pkl files")
+    exit(131)
+
+
 
 class BotMenu():
     

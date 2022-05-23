@@ -1,9 +1,8 @@
 import pandas as pd
 import numpy as np
 import pickle
-import matplotlib.pyplot as plt
-from tqdm.notebook import tqdm
-import re
+# from tqdm.notebook import tqdm
+
 
 import string # библиотека для работы со строками
 import nltk   # Natural Language Toolkit
@@ -11,7 +10,7 @@ import nltk   # Natural Language Toolkit
 import pymorphy2 # Морфологический анализатор
 
 #вычисляем tf-idf
-from sklearn.feature_extraction.text import TfidfVectorizer
+# from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import Binarizer
 
 from data_types import AuthorsDB
@@ -135,13 +134,25 @@ class Model():
     
     def get_authors_last_papers(self, surname):
         output = ['']
-        regex = surname+'\s'
+        surname = surname.strip('.,? ')
+        # regex = surname+'\s'        
+        findme = surname + ' '
+        
         for id,name in self.authors_dict.items():            
-            if surname not in name:
+            if findme not in name:
                 continue
             else:                
-                result = re.match(regex,name)
-                if result is not None: 
+                # result = re.match(regex,name)
+                # print(output)
+                # print(findme)
+                # print(ascii(findme))                
+                result = name.find(findme)
+                # print(result)
+                # if result is not None: 
+                if result>-1:
+                    if output[-1] != '':
+                        output.append(' ---|- -|-|- -|--- \n')
+                                                 
                     output.append(f"На данный момент у автора: {name} учтено {len(self.audb.db[id])} статьи. Вот некоторые из них:\n")        
                     local_res = [(k,v) for k, v in sorted(self.audb.db[id].items(), key=lambda item: item[1]['year'],reverse=True)]
                        # print(mod.audb.db[k][item]['year'])
