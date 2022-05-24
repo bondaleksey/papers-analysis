@@ -106,7 +106,7 @@ class Model():
         
         # request = self.process_request(request)
         request = self.process_request(request)
-        print('request = ', request)    
+        # print('request = ', request)    
         vect_req_uni = self.vectorizer_uni.transform(request)
         vect_req_bi = self.vectorizer_bi.transform(request)
         vect_req_tri = self.vectorizer_tri.transform(request)
@@ -169,17 +169,18 @@ class Model():
         output = ['']
         surname = surname.strip('.,? ')
         # regex = surname+'\s'        
-        findme = surname + ' '
+        findme = surname.lower() + ' '
         
-        for id,name in self.authors_dict.items():            
-            if findme not in name:
+        for id, name in self.authors_dict.items():
+            fname = name.lower()            
+            if findme not in fname:
                 continue
             else:                
                 # result = re.match(regex,name)
                 # print(output)
                 # print(findme)
                 # print(ascii(findme))                
-                result = name.find(findme)
+                result = fname.find(findme)
                 # print(result)
                 # if result is not None: 
                 if result>-1:
