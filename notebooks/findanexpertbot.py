@@ -8,14 +8,14 @@ bot = telebot.TeleBot(config.TOKEN)
 
 @bot.message_handler(commands=['start'])
 def start_message(message):    
-    text = menu.from_undermenu_to_main_menu()
+    text = menu.to_main_menu_state()
     markup = menu.generate_menu_markup()
     bot.send_message(message.chat.id, "Привет ✌️\n"+text, reply_markup=markup)
 
 @bot.message_handler(content_types=['text'])
 def reaction_to_all_messages(message):        
     if message.text.lower() == config.STOPWORD:
-        menu.from_undermenu_to_main_menu()        
+        menu.to_main_menu_state()        
         markup = menu.generate_menu_markup()
         bot.send_message(message.chat.id, "I'm stopping",reply_markup=markup)
         bot.stop_polling()
@@ -30,7 +30,7 @@ def reaction_to_all_messages(message):
             bot.send_message(message.chat.id, menu.menu_default_text, reply_markup=markup)
     else:
         if message.text in menu.undermenu_text:            
-            output_text = menu.from_undermenu_to_main_menu()
+            output_text = menu.to_main_menu_state()
             markup = menu.generate_menu_markup()
             bot.send_message(message.chat.id, output_text, reply_markup=markup)            
         else:

@@ -38,7 +38,7 @@ def get_authors_rating(df, coef):
 class Model():
     
     def __init__(self, path='../data/'):        
-        self.path = path
+        self.path = path        
         # print("self.path = ", self.path)
         self.audb = AuthorsDB(path)
         self.audb.load()
@@ -169,31 +169,35 @@ class Model():
         output = ['']
         surname = surname.strip('.,? ')
         # regex = surname+'\s'        
-        findme = surname.lower() + ' '
+        findme = surname.lower()
         
         for id, name in self.authors_dict.items():
-            fname = name.lower()            
-            if findme not in fname:
+            fname = name[:name.find(' ')].lower()            
+            if findme != fname:                
                 continue
-            else:                
+            else:
+                # print(name)
+                # print(fname)                
+                # print(findme)
                 # result = re.match(regex,name)
                 # print(output)
                 # print(findme)
                 # print(ascii(findme))                
-                result = fname.find(findme)
+                
                 # print(result)
                 # if result is not None: 
-                if result>-1:
-                    if output[-1] != '':
-                        output.append(' ---|- -|-|- -|--- \n')
-                                                 
-                    output.append(f"На данный момент у автора: {name} учтено {len(self.audb.db[id])} статьи. Вот некоторые из них:\n")        
-                    local_res = [(k,v) for k, v in sorted(self.audb.db[id].items(), key=lambda item: item[1]['year'],reverse=True)]
-                       # print(mod.audb.db[k][item]['year'])
-                    for item in local_res[:5]:
-                        print(item[0])
-                        output.append(self.pub.loc[item[0]]['reference']+'\n')
-        print("len(output) = ",len(output))
+                # result = fname.find(findme)
+                # if result>-1:
+                if output[-1] != '':
+                    output.append(' ---|- -|-|- -|--- \n')
+                                                
+                output.append(f"На данный момент у автора: {name} учтено {len(self.audb.db[id])} статьи. Вот некоторые из них:\n")        
+                local_res = [(k,v) for k, v in sorted(self.audb.db[id].items(), key=lambda item: item[1]['year'],reverse=True)]
+                    # print(mod.audb.db[k][item]['year'])
+                for item in local_res[:5]:
+                    # print(item[0])
+                    output.append(self.pub.loc[item[0]]['reference']+'\n')
+        # print("len(output) = ",len(output))
         if len(output) == 1:
             output = [f'Не удалось найти автора по фамилии: {surname}']
         return ''.join(output)
